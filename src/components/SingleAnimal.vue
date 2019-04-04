@@ -1,6 +1,6 @@
 <template>
-    <div class="col-md-3 mb-3">
-      <div class="single-animal-container" v-if="animal.photos.length">
+    <div class="col-md-3 mb-3" v-if="animal.photos.length">
+      <div class="single-animal-container">
         <img :src="animal.photos[0].medium">
         <p class="mb-0">{{animal.name}}</p>
         <span class="font-weight-bold text-capitalize d-block">{{animal.status}}</span>
