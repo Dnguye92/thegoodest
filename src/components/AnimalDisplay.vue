@@ -1,21 +1,21 @@
 <template>
   <div class="row">
-    <SingleAnimal
+    <SingleAnimalDisplay
       v-for="(animal, index) in animalResults"
       v-bind:key="index"
       v-bind:animal="animal"
-    ></SingleAnimal>
+    ></SingleAnimalDisplay>
     </div>
 </template>
 
 <script>
-import SingleAnimal from './SingleAnimal';
+import SingleAnimalDisplay from './SingleAnimalDisplay';
 
 export default {
   name: 'AnimalDisplay',
   props: ['animalResults'],
   components: {
-    SingleAnimal
+    SingleAnimalDisplay
   },
   data() {
     return {

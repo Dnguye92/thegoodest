@@ -11,6 +11,13 @@ module.exports = {
   },
   plugins: [
     new Dotenv()
+    // new webpack.ProvidePlugin({
+    //   $: 'jquery',
+    //   jquery: 'jquery',
+    //   'window.jQuery': 'jquery',
+    //   jQuery: 'jquery',
+    //   'Tether': 'tether'
+    // })
   ],
   module: {
     rules: [

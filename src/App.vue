@@ -1,23 +1,22 @@
 <template>
   <div id="app">
     <Nav/>
-    <Main/>
+    <router-view></router-view>
+    <Footer/>
   </div>
 </template>
 
 <script>
 import Nav from './components/Nav';
-import Main from './components/Main';
-
+import Footer from './components/Footer';
 export default {
   name: 'app',
   components: {
     Nav,
-    Main
+    Footer
   },
   data () {
-    return {
-    }
+    return {}
   }
 }
 </script>
