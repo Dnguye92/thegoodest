@@ -2,7 +2,9 @@ const express = require('express');
 const mongodb = require('mongodb');
 const router = express.Router();
 const UserModel = require('./../../models/User');
-const uri = "mongodb+srv://dylan_nguyen:Meatball1@goodapi-c756a.mongodb.net/GoodDB?retryWrites=true";
+const dotenv = require('dotenv');
+dotenv.config();
+const uri = process.env.MONGOURI;
 
 router.get('/', async (req, res) => {
   const posts = await loadSwipedCollection();
