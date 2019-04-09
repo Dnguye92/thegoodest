@@ -5,31 +5,37 @@
         <div class="search-container">
           <h2 class="mb-4">Seach by location</h2>
           <p class="mb-4">Enter in the necessary information below to pull up shelters in your desired location.</p>
-          <!-- <div class="input-group">
-            <input type="text" class="form-control" placeholder="Zipcode" v-model="inputValue">
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary js-search-btn" type="button" v-on:click="onInputZipSearch">Search</button>
-            </div>
-          </div> -->
-          <div class="form-row">
-            <div class="form-group col-md-6">
+          <div class="form-row justify-content-center">
+            <div class="form-group col-md-5">
               <label for="inputCity">City</label>
-              <input type="text" class="form-control" id="inputCity" v-model="inputValue">
+              <input placeholder="Enter City Name" type="text" class="form-control" id="inputCity"
+                v-model="cityName"
+                :class="{isInvalid: isInvalidSearch, isSuccessful: isSuccessfulSearch}"
+              >
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-5">
               <label for="inputState">State</label>
-              <select id="inputState" class="form-control">
-                <option selected>Choose...</option>
+              <select id="inputState" class="form-control"
+                v-model="selectedState"
+                :class="{isInvalid: isInvalidSearch, isSuccessful: isSuccessfulSearch}"
+              >
+                <option disabled selected>Choose...</option>
                 <option
                   v-for="(state, index) in states"
-                  v-bind:key="index" :value="state"
+                  v-bind:key="index" 
+                  v-bind:value="state"
                 >
                   {{state}}
                 </option>
               </select>
             </div>
             <div class="form-group col-md-2">
-              <button class="btn btn-outline-secondary js-search-btn" type="button" v-on:click="onInputZipSearch">Search</button>
+              <button class="btn btn-outline-secondary js-search-btn" type="button"
+              v-on:click="onInputZipSearch"
+              :class="{isInvalid: isInvalidSearch, isSuccessful: isSuccessfulSearch}"
+            >
+                Search <font-awesome-icon icon="paw" />
+              </button>
             </div>
           </div>
         </div>
@@ -39,6 +45,9 @@
       <div class="col-md-12">
         <div v-if="isLoading">
           <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+        </div>
+        <div class="js-search-results" v-else-if="isInvalidSearch">
+          <p>Please fix the errors above.</p>
         </div>
         <div class="js-search-results" v-else>
           <OrgDisplay
@@ -60,10 +69,13 @@ export default {
   name: 'Search',
   data() {
     return {
-      inputValue: '',
+      cityName: '',
       organizationResults: [],
       isLoading: false,
-      states: ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY']
+      isInvalidSearch: false,
+      isSuccessfulSearch: false,
+      states: ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'],
+      selectedState: ''
     }
   },
   components: {
@@ -71,23 +83,29 @@ export default {
   },
   methods: {
     onInputZipSearch() {
-      console.log(this.inputValue);
       this.isLoading = true;
       client.organization.search({
-        limit: 25
+        location: `${this.cityName}, ${this.selectedState}`,
+        limit: 50
       })
       .then(response => {
-        const res = response;
+        const res = response.data.organizations.filter(org => {
+          return org.photos.length > 0;
+        });
         return res;      
       })
       .then(data => {
-        this.organizationResults = data.data.organizations;
+        this.organizationResults = data;
         this.isLoading = false;
+        this.isInvalidSearch = false;
+        this.isSuccessfulSearch = true;
         console.log(this.organizationResults);
       })
       .catch(error => {
         this.isLoading = false;
-        console.log(err);
+        this.isInvalidSearch = true;
+        this.isSuccessfulSearch = false;
+        console.log(error);
       });
     }
   }
@@ -95,11 +113,17 @@ export default {
 </script>
 
 <style scoped>
-  .container {
+  /* .container {
     height: calc(100vh * 2);
-  }
+  } */
   .form-group.col-md-2 {
     align-self: flex-end;
+  }
+  .isInvalid {
+    border-color: #FF2C37;
+  }
+  .isSuccessful {
+    border-color: green;
   }
   .js-search-btn:hover {
     background-color: #FF2C37;

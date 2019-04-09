@@ -17,6 +17,7 @@
 import Vue from 'vue';
 import VueSwing from 'vue-swing';
 import SingleAnimalDisplay from './SingleAnimalDisplay';
+import Service from './../services/Service';
 
 export default {
   name: 'AnimalDisplay',
@@ -34,7 +35,9 @@ export default {
       rightSwipes: 0,
       rightSwipedAnimals: [],
       leftSwipes: 0,
-      leftSwipedAnimals: []
+      leftSwipedAnimals: [],
+      currentAnimal: null,
+      keepers: []
     }
   },
   components: {
@@ -42,18 +45,26 @@ export default {
     VueSwing
   },
   methods: {
-    onThrowout ({ target, throwDirection }) {
+    onThrowout({ target, throwDirection }) {
       if (throwDirection.toString() == 'Symbol(RIGHT)') {
         this.rightSwipes++;
-        this.rightSwipedAnimals.push(this.animalResults.pop());
-        console.log(`Right Swipes: ${this.rightSwipes}`);
-        console.log(this.rightSwipedAnimals);
+        this.currentAnimal = this.animalResults.pop();
+        Service.addAnimal(this.currentAnimal);
+        this.rightSwipedAnimals.push(this.currentAnimal);
       } else {
         this.leftSwipes++;
-        this.leftSwipedAnimals.push(this.animalResults.pop());
-        console.log(`Left Swipes: ${this.leftSwipes}`);
-        console.log(this.leftSwipedAnimals);
+        this.currentAnimal = this.animalResults.pop();
+        Service.addAnimal(this.currentAnimal);
+        this.leftSwipedAnimals.push(this.currentAnimal);
       }
+    }
+  },
+  async created() {
+    try {
+      this.keepers = await Service.getAnimal();
+      console.log(this.keepers);
+    } catch(err) {
+      console.log(err);
     }
   },
   mounted() {

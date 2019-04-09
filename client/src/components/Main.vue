@@ -6,7 +6,7 @@
     </div>
     <div v-else>
       <div class="hero-container">
-        <h2 class="d-block pt-4 text-white">Some of Your Future Friends</h2>
+        <h1 class="d-block pt-4 mx-2 text-white">The Best Place to Find Your Next Furry Friend</h1>
         <AnimalDisplay v-bind:animalResults="animalResults"></AnimalDisplay>
       </div>
       <div class="search-zip-container container">
@@ -14,7 +14,7 @@
           <div class="col-md-6 pb-4">
             <h2 class="d-block">Looking to visit a shelter near you?</h2>
             <p>TheGoodest.com holds an enormous database of dogs, cats, and even some bunnies that need a home! Let us help you do a more detailed search so that we can help you find your new friend!</p>
-            <router-link to="/search" tag="button" class="btn btn-primary">Start Now</router-link>
+            <router-link to="/search" tag="button" class="btn btn-primary">Start Now <font-awesome-icon icon="paw" /></router-link>
           </div>
           <div class="col-md-6">
             <img src="./../assets/cat-piano.gif" class="img-fluid">
@@ -51,14 +51,17 @@ export default {
     loadData() {
       this.isPageLoading = true;
       client.animal.search({
-        limit: 44
+        limit: 100
       })
       .then(response => {
-        const res = response.data.animals;
+        const res = response.data.animals.filter(animal => {
+          return animal.photos.length > 0
+        });
         return res;      
       })
       .then(data => {
         this.animalResults = data;
+        console.log(this.animalResults);
         this.isPageLoading = false;
       })
       .catch(error => {
@@ -156,6 +159,9 @@ export default {
     }
     .search-zip-container .col-md-6 {
       text-align: center;
+    }
+    .hero-container h1 {
+      font-size: 26px;
     }
   }
 </style>

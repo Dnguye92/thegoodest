@@ -1,9 +1,10 @@
 let path = require('path')
 let webpack = require('webpack')
 let Dotenv = require('dotenv-webpack');
+require("babel-polyfill");
 
 module.exports = {
-  entry: './src/main.js',
+  entry: ['babel-polyfill','./client/src/main.js'],
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
@@ -11,13 +12,6 @@ module.exports = {
   },
   plugins: [
     new Dotenv()
-    // new webpack.ProvidePlugin({
-    //   $: 'jquery',
-    //   jquery: 'jquery',
-    //   'window.jQuery': 'jquery',
-    //   jQuery: 'jquery',
-    //   'Tether': 'tether'
-    // })
   ],
   module: {
     rules: [
@@ -50,16 +44,24 @@ module.exports = {
       }
     ]
   },
+  devServer: {
+    historyApiFallback: true,
+    noInfo: true,
+    compress: true,
+    // disableHostCheck: true,
+    overlay: true
+    // proxy: {
+    //   '^/api/*': {
+    //     target: 'http://localhost:9000/api/',
+    //     secure: false
+    //   }
+    // }
+  },
   resolve: {
     alias: {
       'vue$': 'vue/dist/vue.esm.js'
     },
     extensions: ['*', '.js', '.vue', '.json']
-  },
-  devServer: {
-    historyApiFallback: true,
-    noInfo: true,
-    overlay: true
   },
   performance: {
     hints: false
