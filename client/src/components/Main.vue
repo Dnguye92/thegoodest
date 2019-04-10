@@ -2,7 +2,7 @@
   <div class="container-fluid px-0">
     <div v-if="isPageLoading" class="loading-container">
       <img src="../assets/paw_logo_2.png">
-      <h2 class="loading-header">LOADING THE GOODEST BOYS AND GIRLS...</h2>
+      <h2 class="loading-header">FETCHING THE GOODEST BOYS AND GIRLS...</h2>
     </div>
     <div v-else>
       <div class="hero-container">

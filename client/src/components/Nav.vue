@@ -89,7 +89,7 @@ export default {
   methods: {
     addUser() {
       this.isLoading = true;
-      return axios.post('http://localhost:9000/api/users/', this.user).then(response => {
+      return axios.post('http://localhost:9000/users/', this.user).then(response => {
         if(response.status === 201) {
           this.addedNewUser = true;
           this.isLoading = false;

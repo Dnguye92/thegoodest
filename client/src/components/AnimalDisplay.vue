@@ -49,12 +49,12 @@ export default {
       if (throwDirection.toString() == 'Symbol(RIGHT)') {
         this.rightSwipes++;
         this.currentAnimal = this.animalResults.pop();
-        Service.addAnimal(this.currentAnimal);
+        // Service.addAnimal(this.currentAnimal);
         this.rightSwipedAnimals.push(this.currentAnimal);
       } else {
         this.leftSwipes++;
         this.currentAnimal = this.animalResults.pop();
-        Service.addAnimal(this.currentAnimal);
+        // Service.addAnimal(this.currentAnimal);
         this.leftSwipedAnimals.push(this.currentAnimal);
       }
     }
