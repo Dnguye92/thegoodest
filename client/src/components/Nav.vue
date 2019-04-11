@@ -7,7 +7,12 @@
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">Log in</a>
+          <a class="nav-link" href="#" v-if="userIsLoggedIn">
+            Log out
+          </a>
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal" v-else>
+            Log in
+          </a>
         </li>
         <li class="nav-item">
           <router-link class="nav-link" to="/search">Search</router-link>
@@ -18,16 +23,22 @@
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-body text-left">
-            <form>
+            <div class="text-center" v-if="isLoading">
+              <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            </div>
+            <div class="text-center" v-else-if="userIsLoggedIn && !isLoading">
+              <p>Login successful!</p>
+            </div>
+            <form v-else>
               <div class="form-group">
                 <label for="usernameInput">Username/Email</label>
-                <input type="email" class="form-control" id="usernameInput" aria-describedby="emailHelp" placeholder="Enter email">
+                <input type="email" class="form-control" id="usernameInput" aria-describedby="emailHelp" placeholder="Enter email" v-model="user.email">
               </div>
               <div class="form-group">
                 <label for="passwordInput">Password</label>
-                <input type="password" class="form-control" id="passwordInput" placeholder="Password">
+                <input type="password" class="form-control" id="passwordInput" placeholder="Password" v-model="user.password">
               </div>              
-              <button type="button" class="btn btn-primary">Log In <font-awesome-icon icon="paw" /></button>
+              <button type="button" class="btn btn-primary" v-on:click="loginUser">Log In <font-awesome-icon icon="paw" /></button>
               <p class="my-2">Don't have an account? Click <a href="#" data-toggle="modal" data-target="#createAccountModal" data-dismiss="modal">here</a> to create an account.</p>
             </form>
           </div>
@@ -79,6 +90,7 @@ export default {
     return {
       isLoading: false,
       addedNewUser: false,
+      userIsLoggedIn: false,
       user: {
         email: '',
         password: '',
@@ -89,13 +101,24 @@ export default {
   methods: {
     addUser() {
       this.isLoading = true;
-      return axios.post('http://localhost:9000/users/', this.user).then(response => {
-        if(response.status === 201) {
+      return axios.post(process.env.VUE_APP_USERS_ROUTE, this.user).then(response => {
+        if (response.status === 201) {
           this.addedNewUser = true;
           this.isLoading = false;
         }
       }).catch(err => {
-        console.log(err);
+        this.isLoading = false;
+      });
+    },
+    loginUser() {
+      this.isLoading = true;
+      return axios.post(process.env.VUE_APP_LOGIN_ROUTE, {email: this.user.email, password: this.user.password}).then(response => {
+        if (response.status === 200) {
+          this.userIsLoggedIn = true;
+          this.isLoading = false;
+        }
+      }).catch(err => {
+        this.isLoading = false;
       });
     }
   }
