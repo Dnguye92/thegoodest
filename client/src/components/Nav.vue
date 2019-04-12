@@ -1,9 +1,23 @@
 <template>
-  <nav class="navbar navbar-expand-xl navbar-light bg-light">
+  <nav class="navbar navbar-expand-xl navbar-light d-flex">
     <router-link class="navbar-brand" to="/">The Goodest <img class="ml-1" src="../assets/paw_logo_2.png" width="30" height="30" alt=""></router-link>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
+    </button> -->
+    <button type="button"
+      v-on:click="toggleMenu"
+      class="hamburger hamburger--slider"
+      :class="{'is-active': isActive}"
+    >
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
     </button>
+    <div class="side-menu"
+      :class="{'is-open': isMenuOpen}"
+    >
+      <p>test</p>
+    </div>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
@@ -89,6 +103,8 @@ export default {
   data() {
     return {
       isLoading: false,
+      isActive: false,
+      isMenuOpen: false,
       addedNewUser: false,
       userIsLoggedIn: false,
       user: {
@@ -120,18 +136,50 @@ export default {
       }).catch(err => {
         this.isLoading = false;
       });
+    },
+    toggleMenu() {
+      this.isActive = !this.isActive;
+      this.isMenuOpen = !this.isMenuOpen;
     }
   }
 }
 </script>
 
 <style scoped>
+  /* .navbar {
+    left: 0;
+    justify-content: space-between;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 20;
+  } */
+  .hamburger {
+    z-index: 100;
+  }
+  .hamburger-inner, .hamburger-inner:after, .hamburger-inner:before,
+  .hamburger.is-active .hamburger-inner, .hamburger.is-active .hamburger-inner:after, .hamburger.is-active .hamburger-inner:before {
+    background-color: #FF2C37;
+  }
   .navbar-toggler {
     padding: .25rem;
   }
   .navbar-toggler-icon {
     height: 1em;
     width: 1em;
+  }
+  .side-menu {
+    background-color: white;
+    height: calc(100vh);
+    right: 0;
+    position: absolute;
+    top: 0;
+    transition: 0.3s ease;
+    width: 0;
+  }
+  .side-menu.is-open {
+    width: 350px;
+    z-index: 99;
   }
   .btn {
     background-color: #FF2C37;
@@ -173,6 +221,11 @@ export default {
     }
     100% {
       transform: rotate(360deg);
+    }
+  }
+  @media only screen and (min-width: 1200px) {
+    .hamburger {
+      display: none;
     }
   }
 </style>

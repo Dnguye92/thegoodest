@@ -10,6 +10,7 @@ import 'bootstrap/dist/js/bootstrap.min';
 import './../../node_modules/bootstrap-vue/dist/bootstrap-vue.css'
 import './../../node_modules/vue-swipe/dist/vue-swipe.css';
 import 'popper.js/dist/popper.min';
+import './../../node_modules/hamburgers/dist/hamburgers.min.css';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPaw } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
