@@ -16,7 +16,19 @@
     <div class="side-menu"
       :class="{'is-open': isMenuOpen}"
     >
-      <p>test</p>
+      <ul>
+        <li>
+          <a class="nav-link" href="#" v-if="userIsLoggedIn">
+            Log out
+          </a>
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal" v-else>
+            Log in
+          </a>
+        </li>
+        <li>
+          <router-link class="nav-link" to="/search">Search</router-link>
+        </li>
+      </ul>
     </div>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="navbar-nav">

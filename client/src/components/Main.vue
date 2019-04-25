@@ -51,7 +51,7 @@ export default {
     loadData() {
       this.isPageLoading = true;
       client.animal.search({
-        limit: 100
+        limit: 15
       })
       .then(response => {
         const res = response.data.animals.filter(animal => {
