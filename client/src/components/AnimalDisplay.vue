@@ -61,8 +61,8 @@ export default {
   },
   async created() {
     try {
-      this.keepers = await Service.getAnimal();
-      console.log(this.keepers);
+      // this.keepers = await Service.getAnimal();
+      // console.log(this.keepers);
     } catch(err) {
       console.log(err);
     }

@@ -18,7 +18,7 @@
     >
       <ul>
         <li>
-          <a class="nav-link" href="#" v-if="userIsLoggedIn">
+          <a class="nav-link" href="#" v-if="userIsLoggedIn" v-on:click="logoutUser">
             Log out
           </a>
           <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal" v-else>
@@ -30,7 +30,7 @@
         </li>
       </ul>
     </div>
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+    <!-- <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link" href="#" v-if="userIsLoggedIn">
@@ -44,7 +44,7 @@
           <router-link class="nav-link" to="/search">Search</router-link>
         </li>
       </ul>
-    </div>
+    </div> -->
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -119,6 +119,7 @@ export default {
       isMenuOpen: false,
       addedNewUser: false,
       userIsLoggedIn: false,
+      userToken: null,
       user: {
         email: '',
         password: '',
@@ -144,10 +145,24 @@ export default {
         if (response.status === 200) {
           this.userIsLoggedIn = true;
           this.isLoading = false;
+          this.userToken = response.data.token;
         }
       }).catch(err => {
         this.isLoading = false;
       });
+    },
+    logoutUser() {
+      const headers = {
+        Authorization: `Bearer ${this.userToken}`
+      }
+      this.isLoading = true;
+      return axios.post(process.env.VUE_APP_LOGOUT_ROUTE, { headers }).then(response => {
+        this.userIsLoggedIn = false;
+        this.isLoading = false;
+      }).catch(err => {
+        this.isLoading = false;
+        console.log(err);
+      })
     },
     toggleMenu() {
       this.isActive = !this.isActive;
