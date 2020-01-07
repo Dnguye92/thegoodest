@@ -32,7 +32,7 @@ import VueSwing from 'vue-swing';
 import { Client } from '@petfinder/petfinder-js';
 import AnimalDisplay from './AnimalDisplay';
 
-const client = new Client({apiKey: process.env.VUE_APP_API_KEY , secret: process.env.VUE_APP_SECRET});
+const client = new Client({ apiKey: process.env.VUE_APP_API_KEY, secret: process.env.VUE_APP_SECRET });
 Vue.component('vue-swing', VueSwing);
 
 export default {
@@ -80,7 +80,7 @@ export default {
 
 <style scoped>
   .hero-container {
-    background-image: url('./../assets/bg-hero.jpeg');
+    /* background-image: url('./../assets/bg-hero.jpeg'); */
     background-position: 50% 50%;
     background-repeat: no-repeat;
     background-size: cover;

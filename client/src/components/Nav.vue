@@ -1,10 +1,10 @@
 <template>
   <nav class="navbar navbar-expand-xl navbar-light d-flex">
     <router-link class="navbar-brand" to="/">The Goodest <img class="ml-1" src="../assets/paw_logo_2.png" width="30" height="30" alt=""></router-link>
-    <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
-    </button> -->
-    <button type="button"
+    </button>
+    <!-- <button type="button"
       v-on:click="toggleMenu"
       class="hamburger hamburger--slider"
       :class="{'is-active': isActive}"
@@ -12,7 +12,7 @@
       <span class="hamburger-box">
         <span class="hamburger-inner"></span>
       </span>
-    </button>
+    </button> -->
     <div class="side-menu"
       :class="{'is-open': isMenuOpen}"
     >
@@ -30,10 +30,10 @@
         </li>
       </ul>
     </div>
-    <!-- <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="#" v-if="userIsLoggedIn">
+          <a class="nav-link" href="#" v-if="userIsLoggedIn" v-on:click="logoutUser">
             Log out
           </a>
           <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal" v-else>
@@ -44,7 +44,7 @@
           <router-link class="nav-link" to="/search">Search</router-link>
         </li>
       </ul>
-    </div> -->
+    </div>
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -58,7 +58,7 @@
             <form v-else>
               <div class="form-group">
                 <label for="usernameInput">Username/Email</label>
-                <input type="email" class="form-control" id="usernameInput" aria-describedby="emailHelp" placeholder="Enter email" v-model="user.email">
+                <input type="email" class="form-control" :class="isLoading ? 'valid' : 'error'" id="usernameInput" aria-describedby="emailHelp" placeholder="Enter email" v-model="user.email">
               </div>
               <div class="form-group">
                 <label for="passwordInput">Password</label>
@@ -91,14 +91,16 @@
                 <input type="email" class="form-control" id="createUsernameInput" aria-describedby="emailHelp" placeholder="Enter email" v-model="user.email">
               </div>
               <div class="form-group">
-                <label for="createPasswordinput">Password</label>
-                <input type="password" class="form-control" id="createPasswordinput" placeholder="Password" v-model="user.password">
+                <label for="createPasswordInput">Password</label>
+                <input type="password" class="form-control" id="createPasswordInput" placeholder="Password" v-model="user.password">
+                <p>Please choose a more secure password.</p>
               </div>
               <div class="form-group">
                 <label for="lastNameInput">Full Name</label>
                 <input type="email" class="form-control" id="lastNameInput" aria-describedby="emailHelp" placeholder="Enter Full Name" v-model="user.fullName">
               </div>
-              <button type="button" class="btn btn-primary" v-on:click="addUser">Create Account <font-awesome-icon icon="paw" /></button>
+              <p></p>
+              <button type="button" class="btn btn-primary" v-on:click="addUser">Create Account <font-awesome-icon icon="paw"/></button>
               <p class="py-2">Click <a href="#" data-toggle="modal" data-target="#loginModal" data-dismiss="modal">here</a> to go back to login.</p>
             </form>
           </div>
@@ -136,6 +138,7 @@ export default {
           this.isLoading = false;
         }
       }).catch(err => {
+        console.log('user cannot be created');
         this.isLoading = false;
       });
     },
@@ -149,19 +152,21 @@ export default {
         }
       }).catch(err => {
         this.isLoading = false;
+        console.log('cannot login because of ', err);
       });
     },
     logoutUser() {
       const headers = {
         Authorization: `Bearer ${this.userToken}`
       }
+      console.log(this.userToken);
       this.isLoading = true;
       return axios.post(process.env.VUE_APP_LOGOUT_ROUTE, { headers }).then(response => {
         this.userIsLoggedIn = false;
         this.isLoading = false;
       }).catch(err => {
         this.isLoading = false;
-        console.log(err);
+        console.log('cannot logout because of ', err);
       })
     },
     toggleMenu() {

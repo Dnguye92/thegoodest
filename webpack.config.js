@@ -47,15 +47,8 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     noInfo: true,
-    compress: true,
     // disableHostCheck: true,
     overlay: true
-    // proxy: {
-    //   '^/api/*': {
-    //     target: 'http://localhost:9000/api/',
-    //     secure: false
-    //   }
-    // }
   },
   resolve: {
     alias: {
